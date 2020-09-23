@@ -30,8 +30,34 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  String changed;
-  String submitted;
+  Map check = {
+    'Carottes': false,
+    'Bananes': false,
+    'Yaourt': false,
+    'Pain': false
+  };
+
+  List<Widget> checkList () {
+    List<Widget> l = [];
+    check.forEach((key, value) {
+      Row row = new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          new Text(key, style: new TextStyle(color: value ? Colors.grey : Colors.red),),
+          new Checkbox(
+              value: value,
+              onChanged: (bool b){
+                setState(() {
+                  check[key] = b;
+                });
+              })
+        ],
+      );
+      l.add(row);
+    });
+
+    return l;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,26 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            new TextField(
-              keyboardType: TextInputType.number,
-              onChanged: (String string){
-                setState(() {
-                  changed = string;
-                });
-              },
-              onSubmitted: (String string){
-                setState(() {
-                  submitted = string;
-                });
-              },
-              decoration: new InputDecoration(
-                  labelText: 'Entrez votre nom'
-              ),
-            ),
-            new Text(changed ?? ''),
-            new Text(submitted ?? '')
-          ],
+          children: checkList(),
         )
       ),
 
